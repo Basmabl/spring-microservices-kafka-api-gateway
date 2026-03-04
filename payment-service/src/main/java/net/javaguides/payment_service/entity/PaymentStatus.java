@@ -9,7 +9,7 @@ public enum PaymentStatus {
     PENDING("Pending"),
     SUCCESS("Success"),
     FAILED("Failed"),
-    REFUND("Refund");
+    REFUND("Refun");
 
     public final String label;
 }
