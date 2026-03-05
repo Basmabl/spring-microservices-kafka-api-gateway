@@ -59,7 +59,8 @@ pipeline {
                 sh 'docker-compose down'
                 sh 'docker-compose up -d'
             }
-      }
+        }
+    }
 
     post {
         success {
