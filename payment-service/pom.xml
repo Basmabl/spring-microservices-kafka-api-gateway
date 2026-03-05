@@ -29,7 +29,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
-
+        <sonar.projectKey>payment-service</sonar.projectKey>
+        <sonar.projectName>payment-service</sonar.projectName>
 	</properties>
 	<dependencies>
 		<dependency>

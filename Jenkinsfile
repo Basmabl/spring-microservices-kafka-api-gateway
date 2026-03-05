@@ -46,6 +46,36 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def services = [
+                        'identity-service',
+                        'order-service',
+                        'payment-service',
+                        'product-service',
+                        'email-service'
+                    ]
+                    withSonarQubeEnv('SonarQube') {
+                        services.each { svc ->
+                            echo "=== SonarQube: ${svc} ==="
+                            dir(svc) {
+                                sh "mvn sonar:sonar -Dsonar.projectKey=${svc} -Dsonar.host.url=http://host.docker.internal:9000"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 echo '=== Build des images Docker ==='
@@ -56,8 +86,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '=== Déploiement ==='
-                sh 'docker-compose -p springboot down --remove-orphans'
-                sh 'docker-compose -p springboot up -d'
+                sh 'docker-compose down'
+                sh 'docker-compose up -d'
             }
         }
     }
