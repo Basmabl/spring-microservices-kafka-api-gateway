@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo '=== Récupération du code GitHub ==='
+                echo '=== Récupération du code GitHubN ==='
                 checkout scm
             }
         }
