@@ -56,8 +56,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '=== Déploiement ==='
-                sh 'docker-compose down'
-                sh 'docker-compose up -d'
+                sh 'docker-compose -p springboot down --remove-orphans'
+                sh 'docker-compose -p springboot up -d'
             }
         }
     }
