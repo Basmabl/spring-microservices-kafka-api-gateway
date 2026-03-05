@@ -25,7 +25,7 @@ public class PaymentController {
             return payment != null
                     ? ResponseEntity.ok(new ApiResponse<>(payment, HttpStatus.OK.value()))
                     : ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>("Unknown order ID: " + orderId, HttpStatus.NOT_FOUND.value()));
+                    .body(new ApiResponse<>("Unknn order ID: " + orderId, HttpStatus.NOT_FOUND.value()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(

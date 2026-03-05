@@ -77,11 +77,3 @@ pipeline {
         }
     }
 }
-```
-
----
-
-## Pourquoi `bat` et pas `sh` ?
-```
-sh  → Linux / Mac
-bat → Windows   ← ton PC est Windows donc bat
