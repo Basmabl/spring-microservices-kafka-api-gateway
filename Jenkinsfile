@@ -56,10 +56,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '=== Déploiement ==='
+                sh 'docker-compose down'
                 sh 'docker-compose up -d'
             }
-        }
-    }
+      }
 
     post {
         success {
