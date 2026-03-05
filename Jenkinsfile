@@ -79,15 +79,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo '=== Build des images Docker ==='
-                sh 'docker-compose build'
+                sh 'docker-compose -p myapp build'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo '=== Déploiement ==='
-                sh 'docker-compose down'
-                sh 'docker-compose up -d'
+                sh 'docker-compose -p myapp down --remove-orphans || true'
+                sh 'docker-compose -p myapp up -d'
             }
         }
     }
