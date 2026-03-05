@@ -70,11 +70,3 @@ pipeline {
         }
     }
 }
-```
-
----
-
-## Pouquoi cette confusion ?
-```
-ton PC (Windows)     →   bat
-Jenkins (Linux Docker) →   sh   ← c'est ça qu'il faut
