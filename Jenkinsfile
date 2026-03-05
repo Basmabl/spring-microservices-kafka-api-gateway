@@ -8,7 +8,6 @@ pipeline {
 
     stages {
 
-        // ─── ÉTAPE 1 : Récupérer le code depuis GitHub ───
         stage('Checkout') {
             steps {
                 echo '=== Récupération du code GitHub ==='
@@ -16,18 +15,15 @@ pipeline {
             }
         }
 
-        // ─── ÉTAPE 2 : Builder common-lib EN PREMIER ───
-        // obligatoire car tous les services en dépendent
         stage('Build common-lib') {
             steps {
                 echo '=== Build common-lib ==='
                 dir('common-lib') {
-                    bat 'mvn clean install -DskipTests -Dgpg.skip=true'
+                    sh 'mvn clean install -DskipTests -Dgpg.skip=true'
                 }
             }
         }
 
-        // ─── ÉTAPE 3 : Builder tous les services ───
         stage('Build Services') {
             steps {
                 script {
@@ -43,37 +39,42 @@ pipeline {
                     services.each { svc ->
                         echo "=== Build: ${svc} ==="
                         dir(svc) {
-                            bat 'mvn clean package -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
             }
         }
 
-        // ─── ÉTAPE 4 : Builder les images Docker ───
         stage('Docker Build') {
             steps {
                 echo '=== Build des images Docker ==='
-                bat 'docker-compose build'
+                sh 'docker-compose build'
             }
         }
 
-        // ─── ÉTAPE 5 : Déployer ───
         stage('Deploy') {
             steps {
                 echo '=== Déploiement ==='
-                bat 'docker-compose up -d'
+                sh 'docker-compose up -d'
             }
         }
     }
 
-    // ─── RÉSULTAT FINAL ───
     post {
         success {
-            echo '✅ Pipeline réussi — tout est déployé !'
+            echo '✅ Pipeline réussi !'
         }
         failure {
-            echo '❌ Pipeline échoué — vérifie les logs !'
+            echo '❌ Pipeline échoué !'
         }
     }
 }
+```
+
+---
+
+## Pouquoi cette confusion ?
+```
+ton PC (Windows)     →   bat
+Jenkins (Linux Docker) →   sh   ← c'est ça qu'il faut
