@@ -57,15 +57,18 @@ pipeline {
                         'email-service'
                     ]
                     withSonarQubeEnv('SonarQube') {
+                        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                         services.each { svc ->
                             echo "=== SonarQube: ${svc} ==="
                             dir(svc) {
-                                sh "mvn sonar:sonar -Dsonar.projectKey=${svc} -Dsonar.host.url=http://host.docker.internal:9000"
+                                sh "mvn sonar:sonar -Dsonar.projectKey=${svc} -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.token=${SONAR_TOKEN}"
+                       
                             }
                         }
                     }
                 }
             }
+        }
         }
 
         stage('Quality Gate') {
