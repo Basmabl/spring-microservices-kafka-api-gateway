@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo '=== Récupération du code GitHubN ==='
+                echo '=== Récupération du code GitHub ==='
                 checkout scm
             }
         }
@@ -56,19 +56,19 @@ pipeline {
                         'product-service',
                         'email-service'
                     ]
-                    withSonarQubeEnv('SonarQube') {
-                        withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                         services.each { svc ->
                             echo "=== SonarQube: ${svc} ==="
                             dir(svc) {
-                                sh "mvn sonar:sonar -Dsonar.projectKey=${svc} -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.token=${SONAR_TOKEN}"
-                       
+                                sh '''mvn sonar:sonar \
+                                    -Dsonar.projectKey=''' + svc + ''' \
+                                    -Dsonar.host.url=http://host.docker.internal:9000 \
+                                    -Dsonar.token=$SONAR_TOKEN'''
                             }
                         }
                     }
                 }
             }
-        }
         }
 
         stage('Quality Gate') {
